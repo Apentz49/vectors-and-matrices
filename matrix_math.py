@@ -1,122 +1,91 @@
+import math
+
+
 class ShapeException(Exception):
     pass
 
 
-def vector_add():
+def shape(*vector):
+    if type(vector[0]) is int:
+        return len(vector)
+    elif type(vector[0]) is list:
+        return len(vector), len(vector[0])
+
+
+def vector_sum(*vectors):
+    for vector in vectors:
+        if shape(vector) != shape(vectors[0]):
+            raise ShapeException("These do not match")
+
+    return [sum([vector[i] for vector in vectors])
+        for i in range(len(vectors[0]))]
+
+
+def vector_add(a, p):
     # This is the addition of 2 vectors
-    vector_a = [4, 8, 3]
-    vector_b = [1, 2, 6]
+    if shape(a) != shape(p):
+        raise ShapeException("These do not match")
 
-    for i, bi in enumerate(vector_b): vector_a[i] += bi
-    print(vector_a)
+    return [a[x] + p[x] for x in range(len(a))]
 
 
-def vector_sub():
+def vector_sub(a, p):
     # This is the subtraction of 2 vectors
-    vector_c = [4, 8, 3]
-    vector_d = [1, 2, 6]
+    if shape(a) != shape(p):
+        raise ShapeException("These do not match")
 
-    for i, bi in enumerate(vector_d): vector_c[i] -= bi
-    print(vector_c)
+    return [a[x] - p[x] for x in range(len(a))]
 
 
-def vector_multiply():
+def vector_multiply(vector, scalar):
     # This is where you multiply a vector by a Scalar(number)
-    vector_multi = [a*b for a, b in zip([4, 8, 3,], [1, 2, 6])]
-    print(vector_multi)
+        return[vector[x]*scalar for x in range(len(vector))]
 
 
-def vector_mean():
+def matrix_row(matrix, row_idx):
+    return matrix[row_idx]
+
+
+def matrix_col(matrix, col_idx):
+
+    return [matrix[col_idx] for matrix in matrix]
+
+
+def vector_mean(*vectors):
     # This is the mean of multiple vectors
-    vector_g = [4, 8, 3]
-    vector_h = [1, 2, 6]
-
-    for i, bi in enumerate(vector_h): vector_g[i] += bi / 2
-    print(vector_g)
+    # add the 2 vectors together then divide by len() of the vectors
+    return vector_multiply(vector_sum(*vectors), (1 / len(vectors)))
 
 
-def dot_product():
+def dot(a, b):
     # This is where we do some dot product stuff
-    vector_i = [4, 8, 3]
-    vector_j = [1, 2, 6]
-
-    dot =sum(x*y for x, y in zip(vector_i, vector_j))
-    print(dot)
+    if shape(a) != shape(b):
+        raise ShapeException
+    return sum(a[x]*b[x] for x in range(len(a)))
 
 
-def magnitude():
+def magnitude(vector):
     # This is the sqrt of vector * vector(dot)
-    dot = 38
-    new_magnitude = sum(dot*dot)**0.5
-    print(new_magnitude)
+    return math.sqrt(dot(vector, vector))
 
 
-def matrix_add():
+def matrix_add(x, y):
     # This is where I add 2 matrix together
-    A = [[9, 4, 1],
-         [5, 2, 8],
-         [7, 3, 6]]
-
-    B = [[14, 4, 2],
-         [5, 16, 4],
-         [7, 11, 21]]
-
-    new_matrix = [[0, 0, 0],
-                  [0, 0, 0],
-                  [0, 0, 0]]
-
-    for r in range(len(A)):
-        for c in range(len(A[0])):
-            new_matrix[r][c] = A[r][c] + B[r][c]
-    print(new_matrix)
+    return [sum(x[a] + y[a]) for a in range(len(x))]
 
 
-def matrix_sub():
+def matrix_sub(x, y):
     # Subtraction of 2 matrix
-    # This is not right
-    A = [[9, 4, 1],
-         [5, 2, 8],
-         [7, 3, 6]]
 
-    B = [[14, 4, 2],
-         [5, 16, 4],
-         [7, 11, 21]]
-
-    new_matrix = [[0, 0, 0],
-                  [0, 0, 0],
-                  [0, 0, 0]]
-
-    for r in range(len(A)):
-        for c in range(len(A[0])):
-            new_matrix[r][c] = A[r][c] - B[r][c]
-    print(new_matrix)
+    return [sum(x[a] - y[a]) for a in range(len(x))]
 
 
-def matrix_scalar_multiply():
+def matrix_scalar_multiply(matrix, scalar):
     # Multiply a matrix by a scalar(number)
-    matrix_list = [[2, 2], [9, 5], [3, 7]]
-
-    for this in matrix_list:
-        for that in this:
-            print(that * 2)
+    return [[line*scalar for line in matrix[x]]
+        for x in range(len(matrix))]
 
 
-def matrix_multiply():
-    # Multiply a matrix by a matrix
-    # I do not think this is working correctly.
-    A = [[9, 4, 1],
-         [5, 2, 8],
-         [7, 3, 6]]
-
-    B = [[14, 4, 2],
-         [5, 16, 4],
-         [7, 11, 21]]
-
-    new_matrix = [[0, 0, 0],
-                  [0, 0, 0],
-                  [0, 0, 0]]
-
-    for r in range(len(A)):
-        for c in range(len(A[0])):
-            new_matrix[r][c] = A[r][c] * B[r][c]
-    print(new_matrix)
+# def matrix_multiply():
+#     # Multiply a matrix by a matrix
+#     pass
